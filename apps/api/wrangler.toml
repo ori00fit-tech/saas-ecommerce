@@ -1,0 +1,104 @@
+# apps/api/wrangler.toml
+#
+# ══════════════════════════════════════════════════════════════════
+# CRITICAL — قبل أي deploy، ضع IDs الحقيقية في env.production
+# ══════════════════════════════════════════════════════════════════
+#
+# 1) احصل على IDs:
+#      wrangler d1 list                  ← database_id
+#      wrangler kv namespace list        ← KV id
+#
+# 2) استبدل "REPLACE_WITH_REAL_D1_ID" و "REPLACE_WITH_REAL_KV_ID"
+#    في [env.production] بالقيم الحقيقية ثم commit.
+#
+# 3) Secrets (تُضبط مرة واحدة، لا تُكتب هنا أبداً):
+#      wrangler secret put STRIPE_SECRET_KEY --env production
+#      wrangler secret put STRIPE_WEBHOOK_SECRET --env production
+#      wrangler secret put RESEND_API_KEY --env production
+#      wrangler secret put ADMIN_SECRET --env production
+#
+# ملاحظة: Workers Builds يتجاهل bindings في dashboard ويقرأ من هذا الملف.
+# ══════════════════════════════════════════════════════════════════
+
+# ─── Top-level = wrangler dev فقط (local) ─────────────────────
+name               = "saas-ecommerce-api"
+main               = "src/index.ts"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+# ─── Durable Objects ─────────────────────────────────────────────
+# new_sqlite_classes مطلوبة في Free plan (بدل new_classes)
+[[durable_objects.bindings]]
+name       = "RATE_LIMITER_DO"
+class_name = "RateLimiterDO"
+
+[[migrations]]
+tag                = "v1"
+new_sqlite_classes = ["RateLimiterDO"]
+
+# ─── Local dev bindings (wrangler dev يحاكيها محلياً) ────────────
+[[d1_databases]]
+binding       = "DB"
+database_name = "saas-ecommerce-db"
+database_id   = "b8399644-8850-4b77-980b-7a88b0eee98f"
+
+[[r2_buckets]]
+binding     = "R2"
+bucket_name = "saas-ecommerce-uploads"
+
+[[kv_namespaces]]
+binding = "KV_RATE_LIMIT"
+id      = "8cb76f725eac4112b71abc97de50bad7"
+
+[vars]
+APP_URL      = "http://localhost:4321"
+API_URL      = "http://localhost:8787"
+CORS_ORIGINS = "http://localhost:4321,http://localhost:3000"
+
+[dev]
+port           = 8787
+local_protocol = "http"
+ip             = "127.0.0.1"
+
+# ══════════════════════════════════════════════════════════════════
+# PRODUCTION
+# Deploy:  pnpm -C apps/api deploy:prod
+#     أو:  wrangler deploy --env production (من داخل apps/api)
+# ══════════════════════════════════════════════════════════════════
+[env.production]
+name               = "saas-ecommerce"       # ← اسم الـ Worker في Cloudflare dashboard
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+[[env.production.durable_objects.bindings]]
+name       = "RATE_LIMITER_DO"
+class_name = "RateLimiterDO"
+
+[env.production.vars]
+# قيم public — آمن commit
+APP_URL      = "https://saas-ecommerce-web.pages.dev"
+API_URL      = "https://saas-ecommerce.talidichafiq.workers.dev"
+CORS_ORIGINS = "https://saas-ecommerce-web.pages.dev"
+# عند إضافة domain مخصص: CORS_ORIGINS = "https://yourdomain.com,https://saas-ecommerce-web.pages.dev"
+
+# ── D1 ────────────────────────────────────────────────────────────
+# شغّل: wrangler d1 list  ← انسخ database_id من النتيجة
+[[env.production.d1_databases]]
+binding       = "DB"
+database_name = "saas-ecommerce-db"
+database_id   = "b8399644-8850-4b77-980b-7a88b0eee98f"   
+# ── R2 ────────────────────────────────────────────────────────────
+[[env.production.r2_buckets]]
+binding     = "R2"
+bucket_name = "saas-ecommerce-uploads"
+
+# ── KV ────────────────────────────────────────────────────────────
+# شغّل: wrangler kv namespace list  ← انسخ id بجانب "RATE_LIMIT"
+[[env.production.kv_namespaces]]
+binding = "KV_RATE_LIMIT"
+id      = "8cb76f725eac4112b71abc97de50bad7"         
+# ══════════════════════════════════════════════════════════════════
+# PREVIEW / STAGING (اختياري)
+# ══════════════════════════════════════════════════════════════════

@@ -41,7 +41,7 @@ new_sqlite_classes = ["RateLimiterDO"]
 [[d1_databases]]
 binding       = "DB"
 database_name = "saas-ecommerce-db"
-database_id   = "b8399644-8850-4b77-980b-7a88b0eee98f"
+database_id   = "ad86b604-fc1c-4e49-86f9-3350566fb9ef"
 
 [[r2_buckets]]
 binding     = "R2"
@@ -49,7 +49,7 @@ bucket_name = "saas-ecommerce-uploads"
 
 [[kv_namespaces]]
 binding = "KV_RATE_LIMIT"
-id      = "8cb76f725eac4112b71abc97de50bad7"
+id      = "f480981a52364b24b02191f95ef16d44"
 
 [vars]
 APP_URL      = "http://localhost:4321"
@@ -88,7 +88,7 @@ CORS_ORIGINS = "https://saas-ecommerce-web.pages.dev"
 [[env.production.d1_databases]]
 binding       = "DB"
 database_name = "saas-ecommerce-db"
-database_id   = "b8399644-8850-4b77-980b-7a88b0eee98f"   
+database_id   = "ad86b604-fc1c-4e49-86f9-3350566fb9ef"   
 # ── R2 ────────────────────────────────────────────────────────────
 [[env.production.r2_buckets]]
 binding     = "R2"
@@ -98,7 +98,7 @@ bucket_name = "saas-ecommerce-uploads"
 # شغّل: wrangler kv namespace list  ← انسخ id بجانب "RATE_LIMIT"
 [[env.production.kv_namespaces]]
 binding = "KV_RATE_LIMIT"
-id      = "8cb76f725eac4112b71abc97de50bad7"         
+id      = "f480981a52364b24b02191f95ef16d44"         
 # ══════════════════════════════════════════════════════════════════
 # PREVIEW / STAGING (اختياري)
 # ══════════════════════════════════════════════════════════════════

@@ -18,7 +18,8 @@ import type { AppContext } from '../index.js';
 // ─── Constants ────────────────────────────────────────────────
 const SESSION_COOKIE = '__session';
 const SESSION_TTL_DAYS = 14;
-const PBKDF2_ITERATIONS = 310_000;  // OWASP 2023 for SHA-256
+const PBKDF2_MAX_ITERATIONS = 100_000;
+const PBKDF2_ITERATIONS = PBKDF2_MAX_ITERATIONS;
 const SALT_BYTES = 32;              // 256-bit salt
 
 // ─── Crypto Helpers ───────────────────────────────────────────
@@ -75,6 +76,7 @@ export async function verifyPassword(password: string, stored: string): Promise<
 
   const iterations = parseInt(parts[1], 10);
   if (!Number.isFinite(iterations) || iterations < 100_000) return false;
+  if (iterations > PBKDF2_MAX_ITERATIONS) return false; 
 
   const salt = fromHex(parts[2]);
   const expectedHash = parts[3];

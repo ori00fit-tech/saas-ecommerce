@@ -188,7 +188,7 @@ authRoutes.post('/login', loginRateLimit, async (c) => {
   });
 
   // Always run verifyPassword even when user not found — prevents timing oracle
-  const dummyHash = '$pbkdf2-sha256$310000$' + '00'.repeat(32) + '$' + '00'.repeat(32);
+  const dummyHash = '$pbkdf2-sha256$100000$' + '00'.repeat(32) + '$' + '00'.repeat(32);
   const passwordValid = user
     ? await verifyPassword(password, user.passwordHash)
     : await verifyPassword(password, dummyHash).then(() => false);

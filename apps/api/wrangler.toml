@@ -78,9 +78,9 @@ class_name = "RateLimiterDO"
 
 [env.production.vars]
 # قيم public — آمن commit
-APP_URL      = "https://saas-ecommerce-web.pages.dev"
+APP_URL      = "https://saas-ecommerce.pages.dev"
 API_URL      = "https://saas-ecommerce.talidichafiq.workers.dev"
-CORS_ORIGINS = "https://saas-ecommerce-web.pages.dev"
+CORS_ORIGINS = "https://saas-ecommerce.pages.dev"
 # عند إضافة domain مخصص: CORS_ORIGINS = "https://yourdomain.com,https://saas-ecommerce-web.pages.dev"
 
 # ── D1 ────────────────────────────────────────────────────────────

@@ -70,7 +70,7 @@ const API_URL = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:8787';
       errorMsg.style.display = 'none'; infoMsg.style.display = 'none';
 
       try {
-        const res = await fetch(`${API_URL}/auth/register`, {
+        const res = await fetch(`${ credentials: 'include', API_URL}/auth/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',

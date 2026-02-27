@@ -71,7 +71,7 @@ const API_URL = import.meta.env.PUBLIC_API_URL ?? 'http://localhost:8787';
       errorMsg.style.display = 'none';
 
       try {
-        const res = await fetch(`${API_URL}/auth/login`, {
+        const res = await fetch(`${ credentials: 'include', API_URL}/auth/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',  // ✅ Receive HttpOnly session cookie

@@ -155,7 +155,7 @@ const navItems = [
     async function checkAuth() {
       const tenantSlug = localStorage.getItem('tenant_slug');
       try {
-        const res = await fetch(`${API_URL}/auth/me`, {
+        const res = await fetch(`${ credentials: 'include', API_URL}/auth/me`, {
           credentials: 'include',
           headers: tenantSlug ? { 'X-Tenant-Slug': tenantSlug } : {},
         });
@@ -199,7 +199,7 @@ const navItems = [
     }
 
     async function doLogout() {
-      await fetch(`${API_URL}/auth/logout`, {
+      await fetch(`${ credentials: 'include', API_URL}/auth/logout`, {
         method: 'POST',
         credentials: 'include',
       }).catch(() => {});
